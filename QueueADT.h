@@ -7,8 +7,8 @@
 template <typename T>
 class QueueADT {
 private:
-    Node* front; 
-    Node* rear;  
+    Node<T>* front; 
+    Node<T>* rear;  
     int size; 
 
 public:
