@@ -11,7 +11,7 @@ class Queue{
     public:
     Queue(){
         front=nullptr;
-        rear=nullptr;
+        rear.getNext()=front;
     }
 	Node<T>* getFront() {
         if(front->getNext() ==nullptr){
