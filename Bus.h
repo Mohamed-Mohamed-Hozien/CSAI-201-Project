@@ -1,30 +1,34 @@
 #include <iostream>
+#include "Passenger.h"
 #ifndef BUS_H
 #define BUS_H
 using namespace std;
+
 
 class Bus
 {
     string busType;
     unsigned int busCapacity;
     unsigned int passengersCount;
-    // Passenger passengers[busCapacity]; // Array of type passengers
+    Passenger* passengers; // Array of type Passenger
     string currentJourney;
     string checkupTime;
     string movetimeLaststation;
 
     public:
-    Bus(string type, unsigned int capacity, unsigned int passengersNum, string journey, string checkup, string moveTime){
+    Bus(string type, unsigned int capacity, unsigned int passengersNum, string journey, string checkup, string moveTime)
+    {
     busType = type;
     busCapacity = capacity;
     currentJourney = journey;
     checkupTime = checkup;
     movetimeLaststation = moveTime;
     passengersCount = passengersNum;
+    passengers = new Passenger[capacity];
     }
-    // Bus::~Bus() {
-    // delete[] passengers;
-    // }
+    ~Bus() {
+    delete[] passengers;
+    }
 
     string getBusType() 
     {
@@ -50,7 +54,10 @@ class Bus
     {
         return movetimeLaststation;
     }
-
+    Passenger* getPassengers() 
+    {
+        return passengers;
+    }
 
     void setBusType(string type) 
     {
@@ -76,13 +83,17 @@ class Bus
     {
         movetimeLaststation = moveTime;
     }
-    // bool insertPassenger(Passenger& newPassenger) {
-    // if (passengersCount < capacity) 
-    // {
-    //     passengers[passengersCount++] = newPassenger;
-    //     return true;
-    // } 
-    // return false;
+    
+    bool insertPassenger(Passenger& newPassenger) 
+    {
+    if (passengersCount < busCapacity) 
+    {
+        passengers[passengersCount++] = newPassenger;
+        return true;
+    } 
+    return false;
+    }
+
 };
 
 #endif
