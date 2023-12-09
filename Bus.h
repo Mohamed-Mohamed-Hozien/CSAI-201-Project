@@ -14,7 +14,7 @@ class Bus
     string movetimeLaststation;
 
     public:
-    Bus::Bus(string type, unsigned int capacity, unsigned int passengersNum, string journey, string checkup, string moveTime){
+    Bus(string type, unsigned int capacity, unsigned int passengersNum, string journey, string checkup, string moveTime){
     busType = type;
     busCapacity = capacity;
     currentJourney = journey;
@@ -26,57 +26,57 @@ class Bus
     // delete[] passengers;
     // }
 
-    string Bus::getBusType() 
+    string getBusType() 
     {
        return busType;
     }
-    unsigned int Bus::getBusCapacity() 
+    unsigned int getBusCapacity() 
     {
         return busCapacity;
     }
-    unsigned int Bus::getpassengersNum()
+    unsigned int getpassengersNum()
     {
         return passengersCount;
     }
-    string Bus::getCurrentJourney() 
+    string getCurrentJourney() 
     {
         return currentJourney;
     }
-    string Bus::getCheckupTime()
+    string getCheckupTime()
     {
         return checkupTime;
     }
-    string Bus::getMoveTimeLastStation()
+    string getMoveTimeLastStation()
     {
         return movetimeLaststation;
     }
 
 
-    void Bus::setBusType(string type) 
+    void setBusType(string type) 
     {
         busType = type;
     }
-    void Bus::setBusCapacity(unsigned int capacity) 
+    void setBusCapacity(unsigned int capacity) 
     {
         busCapacity = capacity;
     }
-    void Bus::setpassengersNum(unsigned int passengersNum)
+    void setpassengersNum(unsigned int passengersNum)
     {
         passengersCount = passengersNum;
     }
-    void Bus::setCurrentJourney(string journey)
+    void setCurrentJourney(string journey)
     {
         currentJourney = journey;
     }
-    void Bus::setCheckupTime(string checkup)
+    void setCheckupTime(string checkup)
     {
         checkupTime = checkup;
     }
-    void Bus::setMoveTimeLastStation(string moveTime)
+    void setMoveTimeLastStation(string moveTime)
     {
         movetimeLaststation = moveTime;
     }
-    // bool Bus::insertPassenger(Passenger& newPassenger) {
+    // bool insertPassenger(Passenger& newPassenger) {
     // if (passengersCount < capacity) 
     // {
     //     passengers[passengersCount++] = newPassenger;
