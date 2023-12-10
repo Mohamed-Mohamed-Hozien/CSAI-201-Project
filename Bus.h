@@ -7,16 +7,18 @@ using namespace std;
 
 class Bus
 {
-    string busType;
+    int busType; // 1 for Mbus and 2 for Wbus
     unsigned int busCapacity;
     unsigned int passengersCount;
     Passenger* passengers; // Array of type Passenger
-    string currentJourney;
-    string checkupTime;
-    string movetimeLaststation;
+    int currentJourney;
+    int checkupTime;
+    int movetimeLaststation;
+    int direction; 
 
     public:
-    Bus(string type, unsigned int capacity, unsigned int passengersNum, string journey, string checkup, string moveTime)
+
+    Bus(int type, unsigned int capacity, unsigned int passengersNum, int journey, int checkup, int moveTime)
     {
     busType = type;
     busCapacity = capacity;
@@ -25,12 +27,22 @@ class Bus
     movetimeLaststation = moveTime;
     passengersCount = passengersNum;
     passengers = new Passenger[capacity];
+    direction = 1;
     }
+
+    Bus() : busType(-1), busCapacity(0), passengersCount(0), passengers(nullptr),
+        currentJourney(-1), checkupTime(-1), movetimeLaststation(-1), direction(0) {}
+
+
     ~Bus() {
     delete[] passengers;
     }
 
-    string getBusType() 
+    int getDirection()
+    {
+        return direction;
+    }
+    int getBusType() 
     {
        return busType;
     }
@@ -42,15 +54,15 @@ class Bus
     {
         return passengersCount;
     }
-    string getCurrentJourney() 
+    int getCurrentJourney() 
     {
         return currentJourney;
     }
-    string getCheckupTime()
+    int getCheckupTime()
     {
         return checkupTime;
     }
-    string getMoveTimeLastStation()
+    int getMoveTimeLastStation()
     {
         return movetimeLaststation;
     }
@@ -59,7 +71,12 @@ class Bus
         return passengers;
     }
 
-    void setBusType(string type) 
+    void setDirection(int dir)
+    {
+        direction = dir;
+    }
+
+    void setBusType(int type) 
     {
         busType = type;
     }
@@ -71,15 +88,15 @@ class Bus
     {
         passengersCount = passengersNum;
     }
-    void setCurrentJourney(string journey)
+    void setCurrentJourney(int journey)
     {
         currentJourney = journey;
     }
-    void setCheckupTime(string checkup)
+    void setCheckupTime(int checkup)
     {
         checkupTime = checkup;
     }
-    void setMoveTimeLastStation(string moveTime)
+    void setMoveTimeLastStation(int moveTime)
     {
         movetimeLaststation = moveTime;
     }
@@ -93,6 +110,26 @@ class Bus
     } 
     return false;
     }
+
+
+    
+    friend std::ostream& operator<<(std::ostream& os, const Bus& bus) {
+        os << "Bus Type: " << bus.busType << "\n"
+            << "Bus Capacity: " << bus.busCapacity << "\n"
+            << "Passengers Count: " << bus.passengersCount << "\n"
+            << "Current Journey: " << bus.currentJourney << "\n"
+            << "Checkup Time: " << bus.checkupTime << "\n"
+            << "Move Time Last Station: " << bus.movetimeLaststation << "\n"
+            << "Direction: " << bus.direction << "\n";
+
+        os << "Passengers:\n";
+        for (unsigned int i = 0; i < bus.passengersCount; ++i) {
+            os << "Passenger " << i + 1 << ":\n" << bus.passengers[i] << "\n";
+        }
+
+        return os;
+    }
+
 
 };
 
