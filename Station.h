@@ -7,15 +7,19 @@
 #include "Bus.h"
 #include "Node.h"
 #include "Queue.h"
+#include "LinkedList.h"
 class Station {
 private: 
     //direction 1 moving from s smaller -> sbigger 
     // direction 2 moving from s bigger -> ssmaller
-    PriorityQueue<Passenger> mPassengerQueue1;
-    PriorityQueue<Passenger> mPassengerQueue2;
+    LinkedList<Passenger*> NPassengerList1;
+    LinkedList<Passenger*> NPassengerList2;
+
+    PriorityQueue<Passenger*> SPassengerQueue1;
+    PriorityQueue<Passenger*> SPassengerQueue2;
     
-    Queue<Passenger> wPassengerQueue1;
-    Queue<Passenger> wPassengerQueue2;
+    Queue<Passenger*> wPassengerQueue1;
+    Queue<Passenger*> wPassengerQueue2;
 
     
     Queue<Bus> mBusQueue1;
@@ -26,22 +30,31 @@ private:
 
 public:
 
-    void addPassenger2station(Passenger& p) {
+    void addPassenger2station(Passenger *p) {
         // Normal = 1 , pregnant = 2, POD = 3, aged = 4 , WP = 5
-        if (p.getType() == 5) {
-            if (p.getStartStation() < p.getEndStation()) {
+        if (p->getType() == 5) {
+            if (p->getStartStation() < p->getEndStation()) {
                 wPassengerQueue1.enqueue(p);
             } 
-            else if (p.getStartStation() > p.getEndStation()) {
+            else if (p->getStartStation() > p->getEndStation()) {
                 wPassengerQueue2.enqueue(p);
             }
         }
-        else if (p.getType() >= 1 && p.getType() <= 4){
-            if (p.getStartStation() < p.getEndStation()){
-                mPassengerQueue1.enqueue(p, p.getType());
+        else if (p->getType() == 1){
+            if (p->getStartStation() < p->getEndStation()){
+                NPassengerList1.InsertEnd(p);
             }
-            else if (p.getStartStation() > p.getEndStation()) {
-                mPassengerQueue2.enqueue(p, p.getType());
+            else if (p->getStartStation() > p->getEndStation()) {
+                NPassengerList2.InsertEnd(p);
+            }
+        }
+
+        else if (p->getType() >= 2 && p->getType() <= 4){
+            if (p->getStartStation() < p->getEndStation()){
+                SPassengerQueue1.enqueue(p, p->getType());
+            }
+            else if (p->getStartStation() > p->getEndStation()) {
+                SPassengerQueue2.enqueue(p, p->getType());
             }
         }
     }
@@ -68,40 +81,38 @@ public:
 
     }
 
-    int promotePassengers(int time, int maxWaitTime){
-        int numOfPromotedPassengers = 0;
 
-        Node <Passenger> *temp = mPassengerQueue1.getFrontPtr();
-        Passenger p = temp->getItem();
-        while (temp != nullptr){
-            if (time - temp->getItem().getArrivalTime() > maxWaitTime){
-                mPassengerQueue1.dequeue(p);
-                mPassengerQueue1.enqueue(p, 4);
-                numOfPromotedPassengers++;
+    int promotePassengers(int timestep, int maxWaitingTime) {
+        int promotedPassengersCount = 0;
+        for (auto passenger : NPassengerList1) {
+            if (timestep - passenger->getArrivalTime() > maxWaitingTime) {
+                SPassengerQueue1.enqueue(passenger, 4);
+                NPassengerList1.RemovewithItem(passenger);
+                promotedPassengersCount++;
             }
-            temp = temp->getNext();
         }
 
-        temp = mPassengerQueue2.getFrontPtr();
-        while (temp != nullptr){
-            if (time - temp->getItem().getArrivalTime() > maxWaitTime){
-                mPassengerQueue2.dequeue(p);
-                mPassengerQueue2.enqueue(p, 4);
-                numOfPromotedPassengers++;
+        for (auto passenger : NPassengerList2) {
+            if (timestep - passenger->getArrivalTime() > maxWaitingTime) {
+                SPassengerQueue2.enqueue(passenger, 4);
+                NPassengerList2.RemovewithItem(passenger);
+                promotedPassengersCount++;
             }
-            temp = temp->getNext();
         }
 
-        return numOfPromotedPassengers;
+    
+        return promotedPassengersCount;
     }
 
 
+
+
     void removePassenger(int id){
-        Node <Passenger> *temp = mPassengerQueue2.getFrontPtr();
+        Node <Passenger*> *temp = SPassengerQueue2.getFrontPtr();
         while (temp != nullptr){
-            Passenger p = temp->getItem(); 
-            if (p.getID() == id){
-                mPassengerQueue2.dequeue(p);
+            Passenger* p = temp->getItem(); 
+            if (p->getID() == id){
+                SPassengerQueue2.dequeue(p);
                 return;
             }
             temp = temp->getNext();
@@ -110,9 +121,9 @@ public:
 
 
     Passenger* dequeueMPassenger1(){
-    if (!mPassengerQueue1.isEmpty()) {
+    if (!SPassengerQueue1.isEmpty()) {
         Passenger* temp = new Passenger;
-        mPassengerQueue1.dequeue(*temp);
+        SPassengerQueue1.dequeue(temp);
         return temp;
     } else {
         return nullptr;
@@ -120,9 +131,9 @@ public:
 }
 
 Passenger* dequeueMPassenger2(){
-    if (!mPassengerQueue2.isEmpty()) {
+    if (!SPassengerQueue2.isEmpty()) {
         Passenger* temp = new Passenger;
-        mPassengerQueue2.dequeue(*temp);
+        SPassengerQueue2.dequeue(temp);
         return temp;
     } else {
         return nullptr;
@@ -132,7 +143,7 @@ Passenger* dequeueMPassenger2(){
 Passenger* dequeueWPassenger1(){
     if (!wPassengerQueue1.isEmpty()) {
         Passenger* temp = new Passenger;
-        wPassengerQueue1.dequeue(*temp);
+        wPassengerQueue1.dequeue(temp);
         return temp;
     } else {
         return nullptr;
@@ -142,7 +153,7 @@ Passenger* dequeueWPassenger1(){
 Passenger* dequeueWPassenger2(){
     if (!wPassengerQueue2.isEmpty()) {
         Passenger* temp = new Passenger;
-        wPassengerQueue2.dequeue(*temp);
+        wPassengerQueue2.dequeue(temp);
         return temp;
     } else {
         return nullptr;
@@ -151,19 +162,19 @@ Passenger* dequeueWPassenger2(){
 
 
 //FOR TSTING
-PriorityQueue<Passenger> getMPassengerQueue1(){
-    return mPassengerQueue1;
+PriorityQueue<Passenger*> getSPassengerQueue1(){
+    return SPassengerQueue1;
 }
 
-PriorityQueue<Passenger> getMPassengerQueue2(){
-    return mPassengerQueue2;
+PriorityQueue<Passenger*> getSPassengerQueue2(){
+    return SPassengerQueue2;
 }
 
-Queue<Passenger> getWPassengerQueue1(){
+Queue<Passenger*> getWPassengerQueue1(){
     return wPassengerQueue1;
 }
 
-Queue<Passenger> getWPassengerQueue2(){
+Queue<Passenger*> getWPassengerQueue2(){
     return wPassengerQueue2;
 }
 
@@ -183,7 +194,13 @@ Queue<Bus> getWBusQueue2(){
     return wBusQueue2;
 }
 
+LinkedList<Passenger*> getNPassengerList1(){
+    return NPassengerList1;
+}
 
+LinkedList<Passenger*> getNPassengerList2(){
+    return NPassengerList2;}
+    
 
 
 
