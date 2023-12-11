@@ -78,6 +78,13 @@ public:
             
         }
     }
+    Node<T>* getFrontPtr() {
+    if (this->isEmpty()) {
+        return nullptr;  }
+    else {
+        return rear->getNext();
+         }
+                        }
 
 
     void displayQueue() const {
