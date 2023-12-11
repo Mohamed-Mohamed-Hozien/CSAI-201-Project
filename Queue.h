@@ -8,7 +8,6 @@
 template <typename T>
 class Queue : public QueueADT<T> {
 private:
-    Node<T>* front;
     Node<T>* rear;
     int size;
 
