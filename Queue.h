@@ -5,14 +5,14 @@
 #include "QueueADT.h"
 #include "Node.h"
 
-template <typename T>
+template <typename T> //Linked Queue chain
 class Queue : public QueueADT<T> {
 private:
     Node<T>* rear;
     int size;
 
 public:
-    Queue() : front(nullptr), rear(nullptr), size(0) {}
+    Queue() : rear(nullptr), size(0) {}
 
     void enqueue(const T& data) {
         Node<T>* temp = new Node<T>(data);
@@ -25,8 +25,8 @@ public:
             rear = temp;
         }
     }
-
-    T dequeueAndReturn()  {
+    
+    T dequeueAndReturn()  {   //dequeues and returns dequeues element
         if (this->isEmpty()) return T();
         else if (rear == rear->getNext()) {
             T dequeuedElement = rear->getItem();
@@ -42,7 +42,7 @@ public:
         }
     }   
 
-    bool dequeue(T& data)  {
+    bool dequeue(T& data)  { //dequeues only
         if (isEmpty()) {
             return false; // Unable to remove, list is empty
         } else if (rear == rear->getNext()) {
