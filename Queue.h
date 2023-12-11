@@ -66,12 +66,12 @@ public:
         return size;
     }
 
-    bool getFront(T& data) const {
+    T getFront() const {
         if (this->isEmpty()) {
             return false;
         } else {
-            data = rear->getNext()->getItem();
-            return true;
+            return rear->getNext()->getItem();
+            
         }
     }
 
