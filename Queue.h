@@ -23,6 +23,7 @@ public:
             temp->setNext(rear->getNext());
             rear->setNext(temp);
             rear = temp;
+            size++;
         }
     }
     
@@ -32,12 +33,14 @@ public:
             T dequeuedElement = rear->getItem();
             delete rear;
             rear = nullptr;
+            size--;
             return dequeuedElement;
         } else {
             Node<T>* old = rear->getNext();
             T dequeuedElement = old->getItem();
             rear->setNext(old->getNext());
             delete old;
+            size--;
             return dequeuedElement;
         }
     }   
@@ -48,10 +51,12 @@ public:
         } else if (rear == rear->getNext()) {
             delete rear;
             rear = nullptr;
+            size--;
         } else {
             Node<T>* old = rear->getNext();
             rear->setNext(old->getNext());
             delete old;
+            size--
         }
 
         return true;
