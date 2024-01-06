@@ -12,6 +12,7 @@ private:
     int size;
 
 public:
+
     PriorityQueue() : front(nullptr), size(0) {}
 
     void enqueue(const T& data, int pri)  {
@@ -86,12 +87,34 @@ public:
     void displayQueue() {
         Node<T>* temp = front;
         while (temp != nullptr) {
-            std::cout << temp->getItem() << "  <  ";
+            std::cout << (temp->getItem()) << "  <  ";
             temp = temp->getNext();
         }
         std::cout << std::endl;
     }
+    bool removeAt(int position) {
+            if (position < 0 || position >= size) {
+                return false;  
+            }
+            
 
+            if (position == 0) {
+                dequeue();
+                return true;
+            }
+
+            Node<T>* temp = front;
+            for (int i = 0; i < position - 1; ++i) {
+                temp = temp->getNext();
+            }
+
+            Node<T>* toRemove = temp->getNext();
+            temp->setNext(toRemove->getNext());
+            delete toRemove;
+            size--;
+
+            return true;
+        }
 };
 
 #endif

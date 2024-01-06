@@ -2,80 +2,44 @@
 #include "Station.h"
 
 int main() {
-    // Create a station
+    // Create a Station object
     Station station;
 
-    // Create passengers
-    Passenger passenger1(1, 101, 10, 1, 5, 15, 20);
-    Passenger passenger2(4, 102, 8, 1, 5, 12, 18);
-    Passenger passenger3(2, 103, 5, 1, 5, 10, 25);
+    // Create some passengers and add them to the station
+    Passenger passenger1(4, 1, 0, 1, 5);  // Aged passenger at station 1
+    Passenger passenger2(4, 2, 0, 5, 1);  // Aged passenger at station 5
+    Passenger passenger3(1, 3 ,4 , 2, 3);  // POD passenger at station 2
+    Passenger passenger4(1, 4, 0, 3, 1);  // Normal passenger at station 3
+    station.addPassenger2station(&passenger1);
+    station.addPassenger2station(&passenger2);
+    station.addPassenger2station(&passenger3);
+    station.addPassenger2station(&passenger4);
 
-    // Add passengers to the station
-    station.addPassenger2station(passenger1);
-    station.addPassenger2station(passenger2);
-    station.addPassenger2station(passenger3);
+    // Simulate some time passing
+    int timestep = 6;
+    int maxWaitingTime = 5;
 
-    // Display passenger queues for testing
-    std::cout << "Passenger Queue 1: ";
-    station.getMPassengerQueue1().displayQueue();
+    std::cout << "before promotion";
+    std::cout << "SPassengerQueue1: ";
+    station.getSPassengerQueue1().displayQueue();
+    std::cout << "SPassengerQueue2: ";
+    station.getSPassengerQueue2().displayQueue();
+    
+    // Call the promotePassengers function and get the count of promoted passengers
+    int promotedPassengersCount = station.promotePassengers(timestep, maxWaitingTime);
 
-    std::cout << "Passenger Queue 2: ";
-    station.getMPassengerQueue2().displayQueue();
+    // Display the result
+    std::cout << "Number of passengers promoted: " << promotedPassengersCount << std::endl;
 
-    // Create buses
-    Bus bus1(1, 20, 0, 1, 30, 40);
-    Bus bus2(2, 25, 0, 2, 35, 45);
+    // Display the updated state of the station queues
+    std::cout << "SPassengerQueue1: ";
+    station.getSPassengerQueue1().displayQueue();
+    std::cout << "SPassengerQueue2: ";
+    station.getSPassengerQueue2().displayQueue();
+    // std::cout << "NPassengerList1: ";
+    // station.getNPassengerList1().displayList();
+    // std::cout << "NPassengerList2: ";
+    // station.getNPassengerList2().displayList();
 
-    // Add buses to the station
-    station.addBus2Station(bus1);
-    station.addBus2Station(bus2);
-    // Display bus queues for testing
-    std::cout << "Bus Queue 1: ";
-    station.getMBusQueue1().displayQueue();
-
-    std::cout << "Bus Queue 2: ";
-    station.getMBusQueue2().displayQueue();
-    // Test passenger promotion
-    int promotedPassengers = station.promotePassengers(15, 10);
-    std::cout << "Promoted Passengers: " << promotedPassengers << std::endl;
-
-    // Display updated passenger queues after promotion for testing
-    std::cout << "Passenger Queue 1: ";
-    station.getMPassengerQueue1().displayQueue();
-
-    std::cout << "Passenger Queue 2: ";
-    station.getMPassengerQueue2().displayQueue();
-
-    // Dequeue a passenger from each queue for testing
-    Passenger* dequeuedPassenger1 = station.dequeueMPassenger1();
-    Passenger* dequeuedPassenger2 = station.dequeueMPassenger1();
-    Passenger* dequeuedPassenger3 = station.dequeueMPassenger1();
-
-    // Display dequeued passengers for testing
-   std::cout << "Dequeued Passenger 1: ";
-if (dequeuedPassenger1) {
-    std::cout << "ID " << dequeuedPassenger1->getID();
-} else {
-    std::cout << "None";
+    return 0;
 }
-std::cout << std::endl;
-
-std::cout << "Dequeued Passenger 2: ";
-if (dequeuedPassenger2) {
-    std::cout << "ID " << dequeuedPassenger2->getID();
-} else {
-    std::cout << "None";
-}
-std::cout << std::endl;
-
-std::cout << "Dequeued Passenger 3: ";
-if (dequeuedPassenger3) {
-    std::cout << "ID " << dequeuedPassenger3->getID();
-} else {
-    std::cout << "None";
-}
-std::cout << std::endl;
-
-return 0;
-}
-

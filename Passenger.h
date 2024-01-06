@@ -13,20 +13,22 @@ private:
     int startStation;
     int endStation;
     int getOnTime;
-    int getOffTime;
+    int getOffTime; //movingtime4
     int finishTime;
+    int movingTime;
 
 public:
-    Passenger(int t, int ID, int aTime, int sStation, int eStation, int onTime, int offTime)
+    Passenger(int t, int ID, int aTime, int sStation, int eStation)
     {
         id = ID;
         type = t; // Normal = 1 , pregnant = 2, POD = 3, aged = 4 , WP = 5
         arrivalTime = aTime;
         startStation = sStation;
         endStation = eStation;
-        getOnTime = onTime;
-        getOffTime = offTime;
+        getOnTime = -1;
+        getOffTime = -1;
         finishTime = -1;
+        movingTime = -1;
     }
 
     // default constructor
@@ -40,7 +42,14 @@ public:
         getOnTime = -1;
         getOffTime = -1;
         finishTime = -1;
+        movingTime = -1;
     }
+
+    int getMovingTime()
+    {
+        return movingTime;
+    }
+
     int getID()
     {
         return id;
@@ -72,6 +81,11 @@ public:
     int getFinishTime()
     {
         return finishTime;
+    }
+
+    void setMovingTime(int mTime)
+    {
+        movingTime = mTime;
     }
 
     void setID(int ID)
@@ -120,16 +134,21 @@ public:
         return getOffTime - getOnTime;
     }
     friend std::ostream& operator<<(std::ostream& os, const Passenger& passenger) {
-        os << "Passenger ID: " << passenger.id << "\n"
-            << "Type: " << passenger.type << "\n"
-            << "Arrival Time: " << passenger.arrivalTime << "\n"
-            << "Start Station: " << passenger.startStation << "\n"
-            << "End Station: " << passenger.endStation << "\n"
-            << "Get On Time: " << passenger.getOnTime << "\n"
-            << "Get Off Time: " << passenger.getOffTime << "\n"
+        os << "Passenger ID: " << passenger.id << ", "
+            << "Type: " << passenger.type << ", "
+            << "Arrival Time: " << passenger.arrivalTime << ", "
+            << "Start Station: " << passenger.startStation << ", "
+            << "End Station: " << passenger.endStation << ", "
+            << "Get On Time: " << passenger.getOnTime << ", "
+            << "Get Off Time: " << passenger.getOffTime << ", "
             << "Finish Time: " << passenger.finishTime << "\n";
 
         return os;
+    }
+
+    int getWaitingTime()
+    {
+        return movingTime - arrivalTime;
     }
 
 };

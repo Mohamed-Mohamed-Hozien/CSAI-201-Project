@@ -5,14 +5,15 @@
 #include "QueueADT.h"
 #include "Node.h"
 
-template <typename T> //Linked Queue chain
+template <typename T>
 class Queue : public QueueADT<T> {
 private:
+    Node<T>* front;
     Node<T>* rear;
     int size;
 
 public:
-    Queue() : rear(nullptr), size(0) {}
+    Queue() : front(nullptr), rear(nullptr), size(0) {}
 
     void enqueue(const T& data) {
         Node<T>* temp = new Node<T>(data);
@@ -23,40 +24,35 @@ public:
             temp->setNext(rear->getNext());
             rear->setNext(temp);
             rear = temp;
-            size++;
         }
     }
-    
-    T dequeueAndReturn()  {   //dequeues and returns dequeues element
+
+    T dequeueAndReturn()  {
         if (this->isEmpty()) return T();
         else if (rear == rear->getNext()) {
             T dequeuedElement = rear->getItem();
             delete rear;
             rear = nullptr;
-            size--;
             return dequeuedElement;
         } else {
             Node<T>* old = rear->getNext();
             T dequeuedElement = old->getItem();
             rear->setNext(old->getNext());
             delete old;
-            size--;
             return dequeuedElement;
         }
     }   
 
-    bool dequeue(T& data)  { //dequeues only
+    bool dequeue(T& data)  {
         if (isEmpty()) {
             return false; // Unable to remove, list is empty
         } else if (rear == rear->getNext()) {
             delete rear;
             rear = nullptr;
-            size--;
         } else {
             Node<T>* old = rear->getNext();
             rear->setNext(old->getNext());
             delete old;
-            size--
         }
 
         return true;
@@ -70,21 +66,14 @@ public:
         return size;
     }
 
-    T getFront() const {
+    bool getFront(T& data) const {
         if (this->isEmpty()) {
             return false;
         } else {
-            return rear->getNext()->getItem();
-            
+            data = rear->getNext()->getItem();
+            return true;
         }
     }
-    Node<T>* getFrontPtr() {
-    if (this->isEmpty()) {
-        return nullptr;  }
-    else {
-        return rear->getNext();
-         }
-                        }
 
 
     void displayQueue() const {

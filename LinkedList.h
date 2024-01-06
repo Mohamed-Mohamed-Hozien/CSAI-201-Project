@@ -39,6 +39,7 @@ public:
     void RemoveAt(int index);
     bool IsEmpty() const;
     bool RemovewithItem(const T& item);
+    bool getFront(const T& item);
     Iterator<T> begin() const {
         return Iterator<T>(head);
     }
@@ -145,6 +146,15 @@ T LinkedList<T>::RemoveBegin(const T& item) {
     T data = temp->getItem();
     delete temp;
     return data;
+}
+
+template <typename T>
+bool LinkedList<T>::getFront(const T& item){
+    if (head == nullptr) {
+        return false;
+    }
+    item = head->getItem();
+    return true;
 }
 
 
