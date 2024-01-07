@@ -30,6 +30,8 @@ class Company
     int MbusNum;
     int WbusNum;
     int numberOfStations;
+    int numberOfEvents;
+
 
 
 
@@ -98,7 +100,6 @@ public:
 
 
         //read events
-		int numberOfEvents;
 		file >> numberOfEvents;
 		while (numberOfEvents--) {
 			char eventType;
@@ -159,6 +160,7 @@ public:
         }
     }
 
+    //loop over the moving busses and if they reached their next station (Ttheir move time is = to the time between stations) then they dequeued from the moving busses and queued into the station they reached
     void boardingBussesInStations(){
         for (auto bus : MovingBusesForwards){
             if (bus->getMoveTimeLastStation() >= timeBetStations){
@@ -174,6 +176,7 @@ public:
                         bus ->setDirection(2);
                 }
             }
+            else bus->setMoveTimeLastStation(bus->getMoveTimeLastStation()+1);
         }
         for (auto bus : MovingBusesBackwards){
             if (bus->getMoveTimeLastStation() >= timeBetStations){
@@ -189,11 +192,29 @@ public:
                         bus ->setDirection(1);
                 }
             }
+            else bus->setMoveTimeLastStation(bus->getMoveTimeLastStation()+1);
         }
     }
     
 
-    
+    void handleEventsInStations(int stationnum, int timeNow){
+        if (!events.isEmpty()) {
+            Event * event;
+            events.getFront(event);
+            int id = event->getId();
+            if (event->getTime() == timeNow) {
+                if (event->getType() == "Leave") {
+                    finishedPassengers.InsertEnd(stationsArray[stationnum].removePassenger(id));
+                    event->execute(stationsArray, numberOfStations);
+                    events.dequeue(event);
+                } else if (event->getType() == "Arrival") {
+                    event->execute(stationsArray, numberOfStations);
+                    events.dequeue(event);
+                }
+            }
+        }
+    }
+        
 
     void simulate(){
         readInputFile("random_file.txt");
@@ -204,6 +225,11 @@ public:
             releaseBussesFromFirstStation(lastBusOuttime);
             releaseBussesFromCheckUpList();
             boardingBussesInStations();
+            for (int i = 0; i < numberOfStations; i++) {
+                stationsArray[i].promotePassengers(time, maxWaiting);
+                handleEventsInStations(i, time);
+            }
+
 
 
         }
