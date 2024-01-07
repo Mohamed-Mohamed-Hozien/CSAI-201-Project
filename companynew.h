@@ -159,13 +159,13 @@ public:
         }
     }
 
-    void boardingBussesInStations(int time){
+    void boardingBussesInStations(){
         for (auto bus : MovingBusesForwards){
             if (bus->getMoveTimeLastStation() >= timeBetStations){
                 MovingBusesForwards.RemoveBegin(bus);
                 stationsArray[bus->getNextStation()].addBus2Station(bus);
                 bus->setMoveTimeLastStation(0);
-                if (bus->getNextStation()!=numberOfStations && bus->getNextStation()!= 0){
+                if (bus->getNextStation()!=numberOfStations){
                     bus ->setNextStation(bus->getNextStation()+1);
                 }
                 else if (bus->getNextStation() == numberOfStations){
@@ -174,7 +174,22 @@ public:
                         bus ->setDirection(2);
                 }
             }
+        }
+        for (auto bus : MovingBusesBackwards){
+            if (bus->getMoveTimeLastStation() >= timeBetStations){
+                MovingBusesBackwards.RemoveBegin(bus);
+                stationsArray[bus->getNextStation()].addBus2Station(bus);
+                bus->setMoveTimeLastStation(0);
+                if (bus->getNextStation()!=0){
+                    bus ->setNextStation(bus->getNextStation()-1);
+                }
+                else if (bus->getNextStation() == 0){
+                        bus->setNextStation(1);
+                        bus ->setCurrentJourney(bus->getCurrentJourney()+1);
+                        bus ->setDirection(1);
+                }
             }
+        }
     }
     
 
@@ -188,6 +203,7 @@ public:
         while (time < 24*60){
             releaseBussesFromFirstStation(lastBusOuttime);
             releaseBussesFromCheckUpList();
+            boardingBussesInStations();
 
 
         }
