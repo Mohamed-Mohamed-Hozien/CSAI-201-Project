@@ -11,10 +11,18 @@ using namespace std;
 class Company
 {
 	Station *stationsArray;
-	int maxWaitingTime;
-	LinkedList<Passenger*> passengers;
+	int timeBetStations;
+	LinkedList<Passenger*> finishedPassengers;
 	LinkedList<Bus> buses;
-
+    int WbusCapacity;
+    int MbusCapacity;
+    int maxJourneys;
+    int WcheckUpTime;
+    int McheckUpTime;
+    int maxWaiting;
+    int BoradingDuration;
+    int NbusNum;
+    int MbusNum;
 
 
 public:
@@ -53,8 +61,6 @@ public:
         return new LeaveEvent(time, id);
     }
 
-
-
 	void readInputFile(string fileName) {
 		ifstream file(fileName);
 		if (!file.is_open()) {
@@ -72,10 +78,32 @@ public:
             i++;
 		}
 		//read max waiting time
-		file >> maxWaitingTime;
+		file >> timeBetStations;
+        file >> NbusNum;
+        file >> MbusNum;
+        file >> WbusCapacity;
+        file >> MbusCapacity;
+        file >> maxJourneys;
+        file >> WcheckUpTime;
+        file >> McheckUpTime;
+        file >> maxWaiting;
+        file >> BoradingDuration;
+
+
+        std::cout<< timeBetStations << std::endl;
+        std::cout<< WbusCapacity << std::endl;
+        std::cout<< MbusCapacity << std::endl;
+        std::cout<< maxJourneys << std::endl;
+        std::cout<< WcheckUpTime << std::endl;
+        std::cout<< McheckUpTime << std::endl;
+        std::cout<< maxWaiting << std::endl;
+        std::cout<< BoradingDuration << std::endl;
+
+
         //read events
 		int numberOfEvents;
 		file >> numberOfEvents;
+        std::cout<< numberOfEvents<<std::endl;
 		while (numberOfEvents--) {
 			char eventType;
 			file >> eventType;
@@ -91,5 +119,9 @@ public:
 		}
 		file.close();
 	}
+
+    void simulate(){
+
+    }
 };
 
