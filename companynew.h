@@ -13,7 +13,11 @@ class Company
 	Station *stationsArray;
 	int timeBetStations;
 	LinkedList<Passenger*> finishedPassengers;
-	LinkedList<Bus> buses;
+	LinkedList<Bus*> inCheckUpbuses;
+    int NPassengerCount;
+    int SPassengerCount;
+    int WPassengerCount;
+    int numPromotedPassengers;
     int WbusCapacity;
     int MbusCapacity;
     int maxJourneys;
@@ -21,8 +25,8 @@ class Company
     int McheckUpTime;
     int maxWaiting;
     int BoradingDuration;
-    int NbusNum;
     int MbusNum;
+    int WbusNum;
 
 
 public:
@@ -79,7 +83,7 @@ public:
 		}
 		//read max waiting time
 		file >> timeBetStations;
-        file >> NbusNum;
+        file >> WbusNum;
         file >> MbusNum;
         file >> WbusCapacity;
         file >> MbusCapacity;
@@ -90,20 +94,9 @@ public:
         file >> BoradingDuration;
 
 
-        std::cout<< timeBetStations << std::endl;
-        std::cout<< WbusCapacity << std::endl;
-        std::cout<< MbusCapacity << std::endl;
-        std::cout<< maxJourneys << std::endl;
-        std::cout<< WcheckUpTime << std::endl;
-        std::cout<< McheckUpTime << std::endl;
-        std::cout<< maxWaiting << std::endl;
-        std::cout<< BoradingDuration << std::endl;
-
-
         //read events
 		int numberOfEvents;
 		file >> numberOfEvents;
-        std::cout<< numberOfEvents<<std::endl;
 		while (numberOfEvents--) {
 			char eventType;
 			file >> eventType;
@@ -120,8 +113,31 @@ public:
 		file.close();
 	}
 
+    //adds all the busses to the first Station
+    void addBussesToFirstStation() {
+        int maxBusNum = max(MbusNum, WbusNum);
+        for (int i = 0; i < maxBusNum; i++) {
+            if (i < MbusNum) {
+                Bus* bus = new Bus(1, MbusCapacity, 0, 0, McheckUpTime, 0);
+                stationsArray[0].addBus2Station(bus);
+            }
+            if (i < WbusNum) {
+                Bus* bus = new Bus(2, WbusCapacity, 0, 0, WcheckUpTime, 0);
+                stationsArray[0].addBus2Station(bus);
+            }
+        }
+    }
+    
     void simulate(){
+        readInputFile("random_file.txt");
+        int time = 0;
+        int lastBusOuttime = 15; //time since last bus release from station 0, innitialized with 15 to release the first bus immediately
+        addBussesToFirstStation(); 
+        while (time < 24*60){
+            if (lastBusOuttime >=15){
 
+            }
+        }
     }
 };
 

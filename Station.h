@@ -25,8 +25,8 @@ public:
     Queue<Passenger*> wPassengerQueueBackwards;
 
     
-    Queue<Bus> BusQueueForwards;
-    Queue<Bus> BusQueueBackwards;
+    Queue<Bus*> BusQueueForwards;
+    Queue<Bus*> BusQueueBackwards;
 
     Station(){
         stationNumber = -1;}
@@ -63,11 +63,11 @@ public:
         }
     }
 
-    void addBus2Station(Bus& bus){
-        if (bus.getDirection() == 1){
+    void addBus2Station(Bus* bus){
+        if (bus->getDirection() == 1){
             BusQueueForwards.enqueue(bus);
         }
-        else if (bus.getDirection() == 2){
+        else if (bus->getDirection() == 2){
             BusQueueBackwards.enqueue(bus);
         }
     }
@@ -115,54 +115,54 @@ public:
   // it then takes the input bus and board the passengers from the station queues it will check its type in case of MB it'll onboard
   // the SP first then the NP if it it still not full.
   // in case of WP  it will just add till the bus is either full or the queue is empty
-    void boardingBus(Bus bus, LinkedList<Passenger*>& removedPassengers, int time){
+    void boardingBus(Bus* bus, LinkedList<Passenger*>& removedPassengers, int time){
         // the passenger removed 
-        bus.removePassenger(stationNumber, removedPassengers, time);
+        bus->removePassenger(stationNumber, removedPassengers, time);
 
-        if (bus.getBusType() == 1){
-            if (bus.getDirection() == 1){
-                while (!SPassengerQueueForwards.isEmpty() && bus.isFull()){
+        if (bus->getBusType() == 1){
+            if (bus->getDirection() == 1){
+                while (!SPassengerQueueForwards.isEmpty() && bus->isFull()){
                     Passenger* passenger = SPassengerQueueForwards.dequeueAndReturn();
-                    bus.insertPassenger(passenger, time);
+                    bus->insertPassenger(passenger, time);
                 }
-                while (!NPassengerListForwards.IsEmpty() && bus.isFull()){
+                while (!NPassengerListForwards.IsEmpty() && bus->isFull()){
                     Passenger* passenger;
                     NPassengerListForwards.RemoveBegin(passenger);
-                    bus.insertPassenger(passenger, time);
+                    bus->insertPassenger(passenger, time);
                 }
 
             }
-            else if (bus.getDirection() == 2){
-                while (!SPassengerQueueBackwards.isEmpty() && !bus.isFull()){
+            else if (bus->getDirection() == 2){
+                while (!SPassengerQueueBackwards.isEmpty() && !bus->isFull()){
                     Passenger* passenger = SPassengerQueueBackwards.dequeueAndReturn();
-                    bus.insertPassenger(passenger, time);
+                    bus->insertPassenger(passenger, time);
                 }
-                while (!NPassengerListBackwards.IsEmpty() && bus.isFull()){
+                while (!NPassengerListBackwards.IsEmpty() && bus->isFull()){
                     Passenger* passenger;
                     NPassengerListBackwards.RemoveBegin(passenger);
-                    bus.insertPassenger(passenger, time);
+                    bus->insertPassenger(passenger, time);
                 }
             }
         }
-        else if (bus.getBusType() == 2){
-            if (bus.getDirection() == 1){
-                while (!wPassengerQueueForwards.isEmpty() && bus.isFull()){
+        else if (bus->getBusType() == 2){
+            if (bus->getDirection() == 1){
+                while (!wPassengerQueueForwards.isEmpty() && bus->isFull()){
                     Passenger* passenger = wPassengerQueueForwards.dequeueAndReturn();
-                    bus.insertPassenger(passenger, time);
+                    bus->insertPassenger(passenger, time);
                 }
             }
-            else if (bus.getDirection() == 2){
-                while (!wPassengerQueueBackwards.isEmpty() && bus.isFull()){
+            else if (bus->getDirection() == 2){
+                while (!wPassengerQueueBackwards.isEmpty() && bus->isFull()){
                     Passenger* passenger = wPassengerQueueBackwards.dequeueAndReturn();
-                    bus.insertPassenger(passenger, time);
+                    bus->insertPassenger(passenger, time);
                 }
             }
         }
     }
 
     //uses the boarding bus function to onboard on the bus at the front of the Forward direction Queue, it adds removed passengers to the removed passengers list
-    Bus boardTheBusForward(LinkedList<Passenger*>& removedPassengers, int time){
-        Bus bus;
+    Bus* boardTheBusForward(LinkedList<Passenger*>& removedPassengers, int time){
+        Bus *bus;
         if (!BusQueueForwards.isEmpty()){
             BusQueueForwards.getFront(bus);
             boardingBus(bus, removedPassengers, time);
@@ -171,8 +171,8 @@ public:
         return bus;
     }
     //uses the boarding bus function to onboard on the bus at the front of the Backwards direction Queue, it adds finished passengers to the removed passengers list
-    Bus boardTheBusBackward(LinkedList<Passenger*>& removedPassengers, int time){
-        Bus bus;
+    Bus* boardTheBusBackward(LinkedList<Passenger*>& removedPassengers, int time){
+        Bus* bus;
         if (!BusQueueBackwards.isEmpty()){
             BusQueueBackwards.getFront(bus);
             boardingBus(bus, removedPassengers, time);
