@@ -94,18 +94,18 @@ public:
         return promotedPassengersCount;
     }
 
-    void removePassenger(int id){
+    Passenger* removePassenger(int id){
         for (auto passenger : NPassengerListForwards) {
             if (passenger->getID() == id) {
                 NPassengerListForwards.RemovewithItem(passenger);
-                return;
+                return passenger;
             }
         }
 
         for (auto passenger : NPassengerListBackwards){
             if (passenger->getID() == id) {
                 NPassengerListBackwards.RemovewithItem(passenger);
-                return;
+                return passenger;
             }
         }
         

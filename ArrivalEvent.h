@@ -6,22 +6,21 @@
 #include "Passenger.h"
 using namespace std;
 
-class ArrivalEvent : public Event
-{
+class ArrivalEvent : public Event {
     int passenegerType;
     int startStation;
     int endStation;
 
 public:
     ArrivalEvent(int time, int id, int passenegerType, int startStation, int endStation)
-        : Event(time, id),
-          passenegerType(passenegerType), startStation(startStation), endStation(endStation) {}
+        : Event(time, id, "Arrival"),
+          passenegerType(passenegerType), startStation(startStation), endStation(endStation){}
 
-    void execute(Station *stations, int numStations) override
-    {
+    void execute(Station* stations, int numStations) override {
+        
+            Passenger passenger(passenegerType, id, time, startStation, endStation);
 
-        Passenger passenger(passenegerType, id, time, startStation, endStation);
     }
 };
 
-#endif
+#endif 
