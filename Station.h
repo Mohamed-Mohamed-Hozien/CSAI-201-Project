@@ -28,6 +28,8 @@ public:
     Queue<Bus> BusQueueForwards;
     Queue<Bus> BusQueueBackwards;
 
+    Station(){
+        stationNumber = -1;}
     Station(int sNumber) {
         stationNumber = sNumber;
     }

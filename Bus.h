@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Passenger.h"
 #include "PriorityQueue.h"
+#include "LinkedList.h"
 #ifndef BUS_H
 #define BUS_H
 using namespace std;

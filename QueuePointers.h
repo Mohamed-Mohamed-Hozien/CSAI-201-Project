@@ -1,25 +1,24 @@
-
-#ifndef QUEUE_H
-#define QUEUE_H
+#ifndef QUEUE_point
+#define QUEUE_point
 
 #include "QueueADT.h"
 #include "Node.h"
 
 template <typename T>
-class Queue : public QueueADT<T> {
+class QueuePointers {
 private:
     Node<T>* front;
     Node<T>* rear;
     int size;
 
 public:
-    Queue() : front(nullptr), rear(nullptr), size(0) {}
+    QueuePointers() : front(nullptr), rear(nullptr), size(0) {}
 
-    void enqueue(const T& data) {
+    void enqueue(T* data) {
         Node<T>* temp = new Node<T>(data);
         if (isEmpty()) {
             rear = temp;
-            rear->setNext(rear); 
+            rear->setNext(rear);
         } else {
             temp->setNext(rear->getNext());
             rear->setNext(temp);
@@ -28,76 +27,69 @@ public:
         size++;
     }
 
-    T dequeueAndReturn()  {
-        if (this->isEmpty()) return T();
+    T* dequeueAndReturn() {
+        if (isEmpty()) return nullptr;
         else if (rear == rear->getNext()) {
-            T dequeuedElement = rear->getItem();
+            T* dequeuedElement = rear->getItem();
             delete rear;
             rear = nullptr;
             size--;
             return dequeuedElement;
-
         } else {
             Node<T>* old = rear->getNext();
-            T dequeuedElement = old->getItem();
+            T* dequeuedElement = old->getItem();
             rear->setNext(old->getNext());
             delete old;
             size--;
             return dequeuedElement;
         }
-    }   
+    }
 
-bool dequeue(T& data) {
-    if (isEmpty()) {
-        return false; // Unable to remove, list is empty
-    } else {
-        Node<T>* old = rear->getNext();
-        data = old->getItem(); // Set data to the item being removed
-        if (rear == old) {
-            // The queue only has one item
+    bool dequeue(T*& data) {
+        if (isEmpty()) {
+            return false; // Unable to remove, list is empty
+        } else if (rear == rear->getNext()) {
+            delete rear;
             rear = nullptr;
         } else {
+            Node<T>* old = rear->getNext();
             rear->setNext(old->getNext());
+            delete old;
         }
-        delete old;
-        size--;
-    }
-    return true;
-}
 
-    bool isEmpty() const  {
+        size--;
+        return true;
+    }
+
+    bool isEmpty() const {
         return size == 0;
     }
 
-    int getSize() const  {
+    int getSize() const {
         return size;
     }
 
-    bool getFront(T& data) const {
+    T* getFront() const {
         if (this->isEmpty()) {
-            return false;
+            return nullptr;
         } else {
-            data = rear->getNext()->getItem();
-            return true;
+            return rear->getNext()->getItem();
         }
     }
 
-
     void displayQueue() const {
         if (isEmpty()) cout << "[ ]";
-        else if (rear->getNext()==rear) cout<<"["<<rear->getItem()<<"]";
+        else if (rear->getNext() == rear) cout << "[" << *(rear->getItem()) << "]";
         else {
             Node<T>* ptr = rear->getNext();
             cout << "[ ";
             do {
-                cout << ptr->getItem() << ' ';
+                cout << *(ptr->getItem()) << ' ';
                 ptr = ptr->getNext();
             } while (ptr != rear->getNext());
             cout << ']';
         }
     }
-
-
 };
 
 #endif

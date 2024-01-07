@@ -10,12 +10,11 @@ class ArrivalEvent : public Event {
     int passenegerType;
     int startStation;
     int endStation;
-    int priority;
 
 public:
-    ArrivalEvent(int time, int id, int passenegerType, int startStation, int endStation, int priority = -1)
+    ArrivalEvent(int time, int id, int passenegerType, int startStation, int endStation)
         : Event(time, id),
-          passenegerType(passenegerType), startStation(startStation), endStation(endStation), priority(priority) {}
+          passenegerType(passenegerType), startStation(startStation), endStation(endStation){}
 
     void execute(Station* stations, int numStations) override {
         

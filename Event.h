@@ -1,5 +1,5 @@
-#ifndef EVENT_
-#define EVENT_
+#ifndef EVENT_H
+#define EVENT_H
 
 #include "Station.h"
 class Event
@@ -18,4 +18,4 @@ public:
 	}
 };
 
-#endif EVENT_
+#endif EVENT_H
