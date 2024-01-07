@@ -29,6 +29,8 @@ class Company
     int BoradingDuration;
     int MbusNum;
     int WbusNum;
+    int numberOfStations;
+
 
 
 public:
@@ -73,7 +75,6 @@ public:
         cout << "Error opening the file " << fileName << endl;
         return;
         }
-		int numberOfStations = 0;
 		file >> numberOfStations;
 
 		numberOfStations++;
@@ -158,9 +159,26 @@ public:
         }
     }
 
-    void boardingBussesInStations(){
-        
+    void boardingBussesInStations(int time){
+        for (auto bus : MovingBusesForwards){
+            if (bus->getMoveTimeLastStation() >= timeBetStations){
+                MovingBusesForwards.RemoveBegin(bus);
+                stationsArray[bus->getNextStation()].addBus2Station(bus);
+                bus->setMoveTimeLastStation(0);
+                if (bus->getNextStation()!=numberOfStations && bus->getNextStation()!= 0){
+                    bus ->setNextStation(bus->getNextStation()+1);
+                }
+                else if (bus->getNextStation() == numberOfStations){
+                        bus->setNextStation(numberOfStations-1);
+                        bus ->setCurrentJourney(bus->getCurrentJourney()+1);
+                        bus ->setDirection(2);
+                }
+            }
+            }
     }
+    
+
+    
 
     void simulate(){
         readInputFile("random_file.txt");
