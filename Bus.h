@@ -6,7 +6,6 @@
 #define BUS_H
 using namespace std;
 
-
 class Bus
 {
     int busType; // 1 for Mbus and 2 for Wbus
@@ -18,34 +17,32 @@ class Bus
     int direction;
     int nextStation;
 
-    public:
-    PriorityQueue<Passenger*> onBoardedPassengers;
-
+public:
+    PriorityQueue<Passenger *> onBoardedPassengers;
 
     Bus(int type, unsigned int capacity, unsigned int passengersNum, int journey, int checkup, int moveTime)
     {
-    busType = type;
-    busCapacity = capacity;
-    currentJourney = journey;
-    checkupTime = checkup;
-    movetimeLaststation = moveTime;
-    passengersCount = passengersNum;
-    direction = 1;
-    nextStation =1;
+        busType = type;
+        busCapacity = capacity;
+        currentJourney = journey;
+        checkupTime = checkup;
+        movetimeLaststation = moveTime;
+        passengersCount = passengersNum;
+        direction = 1;
+        nextStation = 1;
     }
     Bus() : busType(-1), busCapacity(0), passengersCount(0),
-        currentJourney(0), checkupTime(-1), movetimeLaststation(-1), direction(0), nextStation(1) {}
-
+            currentJourney(0), checkupTime(-1), movetimeLaststation(-1), direction(0), nextStation(1) {}
 
     int getDirection()
     {
         return direction;
     }
-    int getBusType() 
+    int getBusType()
     {
-       return busType;
+        return busType;
     }
-    unsigned int getBusCapacity() 
+    unsigned int getBusCapacity()
     {
         return busCapacity;
     }
@@ -53,7 +50,7 @@ class Bus
     {
         return passengersCount;
     }
-    int getCurrentJourney() 
+    int getCurrentJourney()
     {
         return currentJourney;
     }
@@ -71,11 +68,11 @@ class Bus
         direction = dir;
     }
 
-    void setBusType(int type) 
+    void setBusType(int type)
     {
         busType = type;
     }
-    void setBusCapacity(unsigned int capacity) 
+    void setBusCapacity(unsigned int capacity)
     {
         busCapacity = capacity;
     }
@@ -103,60 +100,65 @@ class Bus
     {
         return nextStation;
     }
-    bool insertPassenger(Passenger* newPassenger, int time) 
+    bool insertPassenger(Passenger *newPassenger, int time)
     {
-        if (newPassenger->getEndStation() > newPassenger->getStartStation()){
-            if (passengersCount < busCapacity) 
+        if (newPassenger->getEndStation() > newPassenger->getStartStation())
+        {
+            if (passengersCount < busCapacity)
             {
-                //multiplied the end station by -1 in order to have higher priority for people leaving the bus in smaller station.
-                //ex. start = 1, end = 3. then the priority becomes -3
-                //ex. start = 1, end = 5, then the priority becomes -5
-                //here th efirst example will be on th etop of the queue before the second
+                // multiplied the end station by -1 in order to have higher priority for people leaving the bus in smaller station.
+                // ex. start = 1, end = 3. then the priority becomes -3
+                // ex. start = 1, end = 5, then the priority becomes -5
+                // here th efirst example will be on th etop of the queue before the second
                 onBoardedPassengers.enqueue(newPassenger, -1 * newPassenger->getEndStation());
                 passengersCount++;
                 newPassenger->setGetOnTime(time);
                 return true;
-            } 
+            }
             return false;
         }
-        else {
-            if (passengersCount < busCapacity) 
+        else
+        {
+            if (passengersCount < busCapacity)
             {
                 onBoardedPassengers.enqueue(newPassenger, newPassenger->getEndStation());
                 passengersCount++;
                 newPassenger->setGetOnTime(time);
                 return true;
-            } 
+            }
             return false;
         }
     }
 
-    // with the intention of being used in the station class to empty the bus at the front of the queue of the station    
-void removePassenger(int stationNum, LinkedList<Passenger*>& removedPassengers,int time) {
-    Passenger* passenger = nullptr;
+    // with the intention of being used in the station class to empty the bus at the front of the queue of the station
+    void removePassenger(int stationNum, LinkedList<Passenger *> &removedPassengers, int time)
+    {
+        Passenger *passenger = nullptr;
 
-    while (passengersCount > 0) {
-        onBoardedPassengers.getFront(passenger);
+        while (passengersCount > 0)
+        {
+            onBoardedPassengers.getFront(passenger);
 
-        if (passenger->getEndStation() == stationNum) {
-            onBoardedPassengers.dequeue(passenger);
-            removedPassengers.InsertEnd(passenger); // Add the removed passenger to the linked list
-            passengersCount--;
-            passenger->setGetOffTime(time);
-        } else {
-            // Stop the loop when we find a passenger whose end station is not stationNum
-            break;
+            if (passenger->getEndStation() == stationNum)
+            {
+                onBoardedPassengers.dequeue(passenger);
+                removedPassengers.InsertEnd(passenger); // Add the removed passenger to the linked list
+                passengersCount--;
+                passenger->setGetOffTime(time);
+            }
+            else
+            {
+                // Stop the loop when we find a passenger whose end station is not stationNum
+                break;
+            }
         }
     }
-}
 
-    bool isFull(){
+    bool isFull()
+    {
         return passengersCount < busCapacity;
     }
-    
 
-
-    
     // friend std::ostream& operator<<(std::ostream& os, const Bus& bus) {
     //     os << "Bus Type: " << bus.busType << "\n"
     //         << "Bus Capacity: " << bus.busCapacity << "\n"
@@ -173,8 +175,6 @@ void removePassenger(int stationNum, LinkedList<Passenger*>& removedPassengers,i
 
     //     return os;
     // }
-
-
 };
 
 #endif

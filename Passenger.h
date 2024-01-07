@@ -9,11 +9,11 @@ class Passenger
 private:
     int id;
     int type;
-    int arrivalTime; 
+    int arrivalTime;
     int startStation;
     int endStation;
     int getOnTime;
-    int getOffTime; //movingtime4
+    int getOffTime; // movingtime4
     int finishTime;
     int movingTime;
 
@@ -123,7 +123,7 @@ public:
     {
         finishTime = fTime;
     }
-    
+
     int calculateWaitTime(int movingTime)
     {
         return movingTime - arrivalTime;
@@ -133,15 +133,16 @@ public:
     {
         return getOffTime - getOnTime;
     }
-    friend std::ostream& operator<<(std::ostream& os, const Passenger& passenger) {
+    friend std::ostream &operator<<(std::ostream &os, const Passenger &passenger)
+    {
         os << "Passenger ID: " << passenger.id << ", "
-            << "Type: " << passenger.type << ", "
-            << "Arrival Time: " << passenger.arrivalTime << ", "
-            << "Start Station: " << passenger.startStation << ", "
-            << "End Station: " << passenger.endStation << ", "
-            << "Get On Time: " << passenger.getOnTime << ", "
-            << "Get Off Time: " << passenger.getOffTime << ", "
-            << "Finish Time: " << passenger.finishTime << "\n";
+           << "Type: " << passenger.type << ", "
+           << "Arrival Time: " << passenger.arrivalTime << ", "
+           << "Start Station: " << passenger.startStation << ", "
+           << "End Station: " << passenger.endStation << ", "
+           << "Get On Time: " << passenger.getOnTime << ", "
+           << "Get Off Time: " << passenger.getOffTime << ", "
+           << "Finish Time: " << passenger.finishTime << "\n";
 
         return os;
     }
@@ -150,7 +151,6 @@ public:
     {
         return movingTime - arrivalTime;
     }
-
 };
 
 #endif
