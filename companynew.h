@@ -14,6 +14,8 @@ class Company
 	int timeBetStations;
 	LinkedList<Passenger*> finishedPassengers;
 	LinkedList<Bus*> inCheckUpbuses;
+    LinkedList<Bus*> MovingBusesForwards;
+    LinkedList<Bus*> MovingBusesBackwards;
     int NPassengerCount;
     int SPassengerCount;
     int WPassengerCount;
@@ -118,25 +120,58 @@ public:
         int maxBusNum = max(MbusNum, WbusNum);
         for (int i = 0; i < maxBusNum; i++) {
             if (i < MbusNum) {
-                Bus* bus = new Bus(1, MbusCapacity, 0, 0, McheckUpTime, 0);
+                Bus* bus = new Bus(1, MbusCapacity, 0, 0, 0, 0);
                 stationsArray[0].addBus2Station(bus);
             }
             if (i < WbusNum) {
-                Bus* bus = new Bus(2, WbusCapacity, 0, 0, WcheckUpTime, 0);
+                Bus* bus = new Bus(2, WbusCapacity, 0, 0, 0, 0);
                 stationsArray[0].addBus2Station(bus);
             }
         }
     }
-    
+
+ 
+    //check if the last bus out from the station 0 was in 15 mins or more and dequeue from station 0 and add to moving busses in that case
+    void releaseBussesFromFirstStation(int &lastBusOuttime) {
+        if (lastBusOuttime >=15){
+            Bus* bus;
+            bus = stationsArray[0].BusQueueForwards.dequeueAndReturn();
+            MovingBusesForwards.InsertEnd(bus);
+            lastBusOuttime = 0;
+        }
+        else lastBusOuttime++;
+    }
+
+    //loop over the checkup list and if any of their checkuptime exceeded the time set for their type then they queued released into station 0 
+    void releaseBussesFromCheckUpList(){
+        for (auto bus : inCheckUpbuses) {
+            if (bus->getBusType() == 1){
+                if (bus->getCheckupTime() >= McheckUpTime){
+                    bus->setCheckupTime(0);
+                    stationsArray[0].BusQueueForwards.enqueue(bus);
+                    inCheckUpbuses.RemovewithItem(bus);
+                }
+                else{
+                     bus->setCheckupTime(bus->getCheckupTime()+1);
+                }
+            }
+        }
+    }
+
+    void boardingBussesInStations(){
+        
+    }
+
     void simulate(){
         readInputFile("random_file.txt");
         int time = 0;
         int lastBusOuttime = 15; //time since last bus release from station 0, innitialized with 15 to release the first bus immediately
         addBussesToFirstStation(); 
         while (time < 24*60){
-            if (lastBusOuttime >=15){
+            releaseBussesFromFirstStation(lastBusOuttime);
+            releaseBussesFromCheckUpList();
 
-            }
+
         }
     }
 };
